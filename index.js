@@ -3,16 +3,17 @@ const mongoose = require("mongoose");
 const cookiesSession = require("cookie-session");
 const passport = require("passport");
 const authRoutes = require("./routes/authRoutes");
-const { mongoURI } = require("./config/keys");
+const keys = require("./config/keys");
 require("./models/User");
 require("./services/passport");
 
-const dns = require("dns");
-const keys = require("./config/keys");
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
+if (process.env.NODE_ENV !== "production") {
+  const dns = require("dns");
+  dns.setServers(["8.8.8.8", "8.8.4.4"]);
+}
 
 mongoose
-  .connect(mongoURI)
+  .connect(keys.mongoURI)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
